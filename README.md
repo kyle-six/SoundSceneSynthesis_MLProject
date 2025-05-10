@@ -1,4 +1,7 @@
 # SoundSceneSynthesis_MLProject
+
+[Final Report](https://drive.google.com/file/d/1S1wxJPPOehailKreJQ_pyedCR9rf2MJM/view?usp=sharing)
+
 Authors:
 - Chhatrapathi Sivaji Lakkimsetty
 - Josh Manogaran
@@ -16,7 +19,7 @@ newer "TangoFlux" model to achieve higher audio-perception scores in the task.
     5) Evaluate the FAD score between our selected audio and the DCASE baseline
 We also modified the newer TangoFlux model to utilize Wavelet Scattering to improve further. The beginning results of training this new model are also stored here.
 
-    Note, due to incompatibilities between the required components of our approach (AudioLDM (as in DCASE), TangoFlux, and Fad Toolkit)
+Note, due to incompatibilities between the required components of our approach (AudioLDM (as in DCASE), TangoFlux, and Fad Toolkit)
 we were forced to use separate python environments for each stage of the pipeline. This limited our integration of components and relies on
 shell commands and sharing files via local directories. However, the final result indicates that our approach improves upon the SOTA
 
