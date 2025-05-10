@@ -3,13 +3,23 @@ DCASE CHALLENGE 2024, Task 7: Sound Scene Synthesis
 Machine Listening Project
 
 Description:
-    something something improve sota 1 from challenge blah blah
-lorem ipsum dolor sit amet
-
+    This pipeline seeks to improve upon the submissions to the DCASE Challenge 2024 under Task 7: Sound Scene Synthesis. 
+Following from the state-of-the-art approach using AudioLDM in combination with Tango2, we have chosen to adapt and implement the
+newer "TangoFlux" model to achieve higher audio-perception scores in the task. 
+    Our improved approach follows:
+    1) Load AudioLDM and TangoFlux
+    2) Run inference on both models to get 2 potential waveforms
+    3) Compute audio embeddings of both waveforms
+    4) Selectively replace the waveform using the cosine similarity of the embeddings
+    5) Evaluate the FAD score between our selected audio and the DCASE baseline
+    
+    Note, due to incompatibilities between the required components of our approach (AudioLDM (as in DCASE), TangoFlux, and Fad Toolkit)
+we were forced to use separate python environments for each stage of the pipeline. This limited our integration of components and relies on
+shell commands and sharing files via local directories. However, the final result indicates that our approach improves upon the SOTA
 
 Authors:
-    Shiv (?)
-    Josh Manogaram (?)
+    Chhatrapathi Sivaji Lakkimsetty
+    Josh Manogaran
     Kyle Six
     Kahlia Gronthos
 '''
