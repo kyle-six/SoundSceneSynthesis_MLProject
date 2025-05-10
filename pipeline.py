@@ -1,0 +1,80 @@
+'''
+DCASE CHALLENGE 2024, Task 7: Sound Scene Synthesis
+Machine Listening Project
+
+Description:
+    something something improve sota 1 from challenge blah blah
+lorem ipsum dolor sit amet
+
+
+Authors:
+    Shiv (?)
+    Josh Manogaram (?)
+    Kyle Six
+    Kahlia Gronthos
+'''
+
+import os, subprocess, time
+import numpy as np
+from pathlib import Path
+
+print("#################### Sound Scene Synthesis ##################")
+print(f"Operating System: {os.name}")
+if os.name != "nt":
+    print("Non-windows environment! This pipeline uses nt-based shell commands")
+    
+PROJECT_ROOT = Path(__file__).parent
+
+DATASET_ROOT = PROJECT_ROOT.joinpath("dataset/dcase2024_task7_development")
+
+OUTPUT_ROOT = PROJECT_ROOT.joinpath("outputs")
+OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+
+# Create new output folder for this run
+current_time = time.strftime("%Y%m%d-%H%M%S")
+output_folder = OUTPUT_ROOT.joinpath(f"{current_time}")
+output_folder.mkdir(parents=True, exist_ok=False)
+
+def custom_env_commands(env_name: str) -> str:
+    return f"conda create -y --name mlproject-{env_name} python=3.9 && conda activate mlproject-{env_name} && python -m pip install -r src/{env_name}/requirements.txt &&"
+
+############### Inference ###############
+'''
+Computes the waveforms using the appropraite versions of AudioLDM and TangoFlux
+'''
+#os.system("")
+command_result = os.system(
+    custom_env_commands("inference") +
+    f"python src/inference/main.py --dataset_folder={DATASET_ROOT} --output_folder={output_folder}"
+    )
+print(command_result)
+
+############### Embeddings & Cosine Similarity ###############
+'''
+Computes the pann-wavegram-logmel embeddings from the waveforms. Alos computes the cosine similarity between both models' embeddings and selects the higher as the output
+'''
+# Generate embeddings
+command_result = os.system(
+    custom_env_commands("embeddings") +
+    f"fadtk.embeds panns-wavegram-logmel -d {output_folder.joinpath("waveforms")}"
+    )
+print(command_result)
+# Compute cosine similarity
+command_result = os.system(
+    "conda activate mlproject-embeddings &&" +
+    f"python src/embeddings/main.py --dataset_folder={DATASET_ROOT} --output_folder={output_folder} --embeddings_folder={output_folder.joinpath("embeddings/panns-wavegram-logmel")}"
+    )
+print(command_result)
+
+############### FAD Evaluation ###############
+'''
+Computes the Frechet Audio Distance between our selected audio and the given reference audio in DCASE 2024 Task7
+'''
+command_result = os.system(
+    custom_env_commands("fad") +
+    f"python src/fad/main.py --dataset_folder={DATASET_ROOT} --output_folder={output_folder} --selected_audio_folder={output_folder.joinpath("selected_audio")}"
+    )
+print(command_result)
+
+fad_score = np.load(output_folder.joinpath("FINAL_FAD_SCORE.npy"))
+print(f"#####################################\n -> Final FAD Score: {fad_score:.3f}")

@@ -1,0 +1,2 @@
+fadtk @ git+https://github.com/DCASE2024-Task7-Sound-Scene-Synthesis/fadtk.git
+sklearn
