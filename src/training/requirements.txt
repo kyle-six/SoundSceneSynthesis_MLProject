@@ -1,0 +1,2 @@
+kymatio
+tangoflux@git+https://github.com/declare-lab/TangoFlux.git
